@@ -147,6 +147,23 @@ Here are some useful Docker commands:
   docker-compose logs -f
   ```
 
+### WebSocket Integration
+
+Real-time updates for chat messages are provided via WebSocket. To listen to chat messages, subscribe to the `PresenceChannel` in the format `chat.{chatroom_id}`. The event `MessageSent` broadcasts any new messages in this channel.
+
+#### Example:
+
+```javascript
+Echo.join(`chat.${chatroomId}`)
+    .listen('MessageSent', (e) => {
+        console.log(e.message);
+    });
+
+Echo.private(`chatroom.${chatroomId}`)
+    .listen('UserEnteredChatroom', (e) => {
+        console.log(`${e.user.name} has entered the chatroom!`);
+    });
+```
 ## Environment Configuration
 
 You may need to update your `.env` file based on the Docker container environment. By default, the application uses the following environment variables for Docker:

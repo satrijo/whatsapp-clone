@@ -3,7 +3,6 @@
 namespace App\Events;
 
 use App\Models\Message;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -23,6 +22,6 @@ class MessageSent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PresenceChannel('chat.' . $this->message->chatroom_id);
+        return new PresenceChannel('chat.'.$this->message->chatroom_id);
     }
 }

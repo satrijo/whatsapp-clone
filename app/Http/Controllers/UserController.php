@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -13,32 +13,37 @@ class UserController extends Controller
      *     path="/api/register",
      *     summary="Register a new user",
      *     tags={"Register"},
+     *
      *     @OA\Parameter(
      *         name="name",
      *         in="query",
      *         description="User's name",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Parameter(
      *         name="email",
      *         in="query",
      *         description="User's email",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
+     *
      *     @OA\Parameter(
      *         name="password",
      *         in="query",
      *         description="User's password",
      *         required=true,
+     *
      *         @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(response="201", description="User registered successfully"),
      * )
      */
-
     public function register(Request $request)
     {
         $request->validate([
@@ -67,38 +72,49 @@ class UserController extends Controller
      *     summary="Login a user",
      *     description="Authenticates a user by email and password and returns a Bearer token if successful.",
      *     tags={"Login"},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="password123")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Login successful",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="access_token", type="string", example="your_token_here"),
      *             @OA\Property(property="token_type", type="string", example="Bearer")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Invalid login details",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Invalid login details")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=500,
      *         description="Internal server error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="error", type="string", example="Error message")
      *         )
      *     )
      * )
      */
-
     public function login(Request $request)
     {
         $request->validate([
@@ -107,15 +123,15 @@ class UserController extends Controller
         ]);
 
         try {
-            if (!Auth::attempt($request->only('email', 'password'))) {
+            if (! Auth::attempt($request->only('email', 'password'))) {
                 return response()->json([
-                    'message' => 'Invalid login details'
+                    'message' => 'Invalid login details',
                 ], 401);
             }
 
             $user = Auth::user();
 
-            if (!$user instanceof User) {
+            if (! $user instanceof User) {
                 throw new \Exception('User is not authenticated');
             }
 

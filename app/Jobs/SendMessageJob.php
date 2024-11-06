@@ -2,19 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Models\Message;
 use App\Events\MessageSent;
+use App\Models\Message;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 class SendMessageJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
-
 
     protected $messageData;
 
@@ -32,12 +30,12 @@ class SendMessageJob implements ShouldQueue
 
             Log::info('Message processed successfully', [
                 'message_id' => $message->id,
-                'chatroom_id' => $message->chatroom_id
+                'chatroom_id' => $message->chatroom_id,
             ]);
         } catch (\Exception $e) {
             Log::error('Error processing message in queue', [
                 'error' => $e->getMessage(),
-                'messageData' => $this->messageData
+                'messageData' => $this->messageData,
             ]);
 
             throw $e; // Re-throw untuk trigger retry mechanism
@@ -48,7 +46,7 @@ class SendMessageJob implements ShouldQueue
     {
         Log::error('Failed to process message', [
             'error' => $exception->getMessage(),
-            'messageData' => $this->messageData
+            'messageData' => $this->messageData,
         ]);
     }
 }

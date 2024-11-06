@@ -9,7 +9,9 @@ use Illuminate\Support\Str;
 class Message extends Model
 {
     protected $fillable = ['user_id', 'chatroom_id', 'text', 'attachment_path'];
+
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     public static function booted()
