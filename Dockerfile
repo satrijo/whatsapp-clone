@@ -1,6 +1,7 @@
+# Gunakan base image php:8.2-fpm
 FROM php:8.2-fpm
 
-# Install system dependencies
+# Install dependencies sistem
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,24 +11,26 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     supervisor \
-    libpq-dev
+    libpq-dev \
+    nodejs \
+    npm
 
-# Clear cache
+# Bersihkan cache apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
+# Install ekstensi PHP yang diperlukan
 RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
 
-# Install Redis extension
+# Install ekstensi Redis untuk PHP
 RUN pecl install redis && docker-php-ext-enable redis
 
-# Get latest Composer
+# Copy Composer dari image composer terbaru
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# Set direktori kerja
 WORKDIR /var/www
 
-# Create necessary directories and set permissions
+# Buat direktori yang diperlukan dan atur permission
 RUN mkdir -p \
     /var/log/supervisor \
     /var/run/supervisor \
@@ -37,22 +40,25 @@ RUN mkdir -p \
     /var/run/supervisor \
     /var/run/php-fpm
 
-# Copy application files
+# Copy semua file aplikasi ke dalam container
 COPY . .
 
-# Install dependencies
-RUN composer install --no-interaction
+# Install Composer dependencies
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Set permissions
+# Install NPM dependencies
+RUN npm install && npm run build
+
+# Set permission
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
     && chmod -R 755 /var/www/bootstrap/cache
 
-# Copy supervisor configuration
+# Copy konfigurasi Supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Expose port 9000
+# Expose port untuk PHP-FPM
 EXPOSE 9000
 
-# Start supervisor
+# Jalankan Supervisor sebagai perintah default
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
