@@ -174,7 +174,7 @@ class ChatroomController extends Controller
      * @OA\Post(
      *     path="/api/chatrooms/{chatroom}/enter",
      *     summary="Join a chatroom",
-     *     description="Allows an authenticated user to join a chatroom if there is space and they are not already a member.",
+     *     description="Allows an authenticated user to join a chatroom if there is space and they are not already a member. Once the user joins, a WebSocket event 'UserEnteredChatroom' will be broadcasted on the 'chatroom.{chatroom_id}' channel.",
      *     tags={"Chatrooms"},
      *     security={{"sanctum": {}}},
      *
@@ -227,24 +227,7 @@ class ChatroomController extends Controller
      *         )
      *     )
      *
-     *      @OA\AdditionalProperties(
-     *         description="WebSocket Event",
-     *         properties={
-     *
-     *             @OA\Property(
-     *                 property="event",
-     *                 type="string",
-     *                 description="Name of the WebSocket event that is triggered",
-     *                 example="UserEnteredChatroom"
-     *             ),
-     *             @OA\Property(
-     *                 property="channel",
-     *                 type="string",
-     *                 description="Channel on which the event is broadcasted",
-     *                 example="chatroom.{chatroom_id}"
-     *             )
-     *         }
-     *     )
+
      * )
      */
     public function enter(Request $request, Chatroom $chatroom)

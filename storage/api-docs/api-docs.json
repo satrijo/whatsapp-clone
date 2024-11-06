@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Dokumentasi API",
-        "description": "Whatsapp Clone API Documentation",
+        "description": "Whatsapp Clone API Documentation, more details at https://github.com/satrijo/whatsapp-clone/blob/main/README.md",
         "contact": {
             "email": "mail@satrio.dev"
         },
@@ -270,7 +270,7 @@
                     "Chatrooms"
                 ],
                 "summary": "Join a chatroom",
-                "description": "Allows an authenticated user to join a chatroom if there is space and they are not already a member.",
+                "description": "Allows an authenticated user to join a chatroom if there is space and they are not already a member. Once the user joins, a WebSocket event 'UserEnteredChatroom' will be broadcasted on the 'chatroom.{chatroom_id}' channel.",
                 "operationId": "990649538e8db7d02764f28786a61ef5",
                 "parameters": [
                     {
@@ -546,7 +546,7 @@
                     "Messages"
                 ],
                 "summary": "Send a message to a chatroom",
-                "description": "Sends a message to a chatroom, optionally with an attachment (image/video).",
+                "description": "This endpoint retrieves messages for the specified chatroom. To receive real-time updates, use WebSocket to subscribe to the 'chat.{chatroom_id}' channel.",
                 "operationId": "d06cf596d94c72de0aa5f15bec7f3914",
                 "parameters": [
                     {

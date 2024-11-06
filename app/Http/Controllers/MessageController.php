@@ -147,32 +147,6 @@ class MessageController extends Controller
      *         )
      *     )
      *
-     *     @OA\AdditionalProperties(
-     *         description="WebSocket Event",
-     *         properties={
-     *
-     *             @OA\Property(
-     *                 property="event",
-     *                 type="string",
-     *                 description="Name of the WebSocket event that is triggered",
-     *                 example="MessageSent"
-     *             ),
-     *             @OA\Property(
-     *                 property="channel",
-     *                 type="string",
-     *                 description="Channel on which the event is broadcasted",
-     *                 example="chat.{chatroom_id}"
-     *             ),
-     *             @OA\Property(
-     *                 property="payload",
-     *                 type="object",
-     *                 description="Message data sent with the event",
-     *                 @OA\Property(property="message_id", type="string", example="c9a82b8f-4622-4cbf-a1a1-7f1b7699c9e7"),
-     *                 @OA\Property(property="chatroom_id", type="string", example="13662cf0-ead2-48b7-a056-ded77823fe9c"),
-     *                 @OA\Property(property="content", type="string", example="Hello, everyone!")
-     *             )
-     *         }
-     *     )
      * )
      */
     public function sendMessage(Request $request, $chatroomId)
