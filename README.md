@@ -18,7 +18,7 @@ This is a Laravel application with Docker containers to help you run the app in 
 - **Laravel**: A PHP framework for building web applications.
 - **Docker**: Containerization tool for creating isolated environments.
 - **Swagger/OpenAPI**: For generating API documentation that can be accessed via a web interface.
-- **MySQL**: Database for storing application data.
+- **PostgreSQL**: Database for storing application data.
 - **Redis**: Used for caching and session management (if required).
 
 ## Installation
@@ -40,7 +40,7 @@ docker-compose up --build -d
 
 This command will:
 - Build and start the Laravel application container
-- Set up the MySQL database container
+- Set up the PostgreSQL database container
 - Set up the Redis container (if configured)
 
 ### 3. Set up the environment variables:
@@ -152,12 +152,12 @@ Here are some useful Docker commands:
 You may need to update your `.env` file based on the Docker container environment. By default, the application uses the following environment variables for Docker:
 
 - **APP_URL**: The URL for the Laravel application (`http://localhost` by default).
-- **DB_CONNECTION**: The database connection (`mysql` by default).
-- **DB_HOST**: The database host (`mysql` by default, which corresponds to the MySQL container).
-- **DB_PORT**: The database port (default: `3306`).
-- **DB_DATABASE**: The database name (`laravel` by default).
-- **DB_USERNAME**: The MySQL user (`root` by default).
-- **DB_PASSWORD**: The password for MySQL (`root` by default).
+- **DB_CONNECTION**: The database connection (`pgsql` by default).
+- **DB_HOST**: The database host (`db` by default, which corresponds to the PostgreSQL container).
+- **DB_PORT**: The database port (default: `5432`).
+- **DB_DATABASE**: The database name (`whatsapp` by default).
+- **DB_USERNAME**: The PostgreSQL user (`postgres` by default).
+- **DB_PASSWORD**: The password for PostgreSQL (`password` by default).
 
 Make sure your `.env` file matches these settings for Docker to work properly.
 
