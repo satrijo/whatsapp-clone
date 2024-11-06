@@ -1,66 +1,164 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Project with Docker and Swagger Integration
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is a Laravel application setup with Docker and integrated Swagger (OpenAPI) documentation.
 
-## About Laravel
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [Swagger API Documentation](#swagger-api-documentation)
+- [Docker Commands](#docker-commands)
+- [Environment Configuration](#environment-configuration)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Project Overview
+This is a Laravel application with Docker containers to help you run the app in an isolated, consistent environment. It also includes Swagger integration for API documentation, which can be accessed within the application.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technologies Used
+- **Laravel**: A PHP framework for building web applications.
+- **Docker**: Containerization tool for creating isolated environments.
+- **Swagger/OpenAPI**: For generating API documentation that can be accessed via a web interface.
+- **MySQL**: Database for storing application data.
+- **Redis**: Used for caching and session management (if required).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
 
-## Learning Laravel
+Follow the steps below to set up this project locally.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Clone the repository:
+```bash
+git clone https://github.com/satrijo/whatsapp-clone.git
+cd whatsapp-clone
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 2. Build and start the Docker containers:
+The project comes with a `docker-compose.yml` file for setting up Docker containers.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+docker-compose up --build -d
+```
 
-## Laravel Sponsors
+This command will:
+- Build and start the Laravel application container
+- Set up the MySQL database container
+- Set up the Redis container (if configured)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 3. Set up the environment variables:
+Copy the `.env.example` file to `.env`:
 
-### Premium Partners
+```bash
+cp .env.example .env
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Configure your `.env` file as needed (database credentials, etc.).
 
-## Contributing
+### 4. Run migrations:
+Once the containers are running, run the Laravel migrations to set up the database:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+docker-compose exec app php artisan migrate
+```
 
-## Code of Conduct
+### 5. Install Composer dependencies:
+Make sure all Laravel dependencies are installed by running:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+docker-compose exec app composer install
+```
 
-## Security Vulnerabilities
+## Running the Application
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Access the application:
+Once the Docker containers are running, you can access the Laravel application at:
+```
+http://localhost
+```
 
-## License
+### 2. Access the Swagger Documentation:
+Swagger API documentation will be available at the following URL:
+```
+http://localhost/docs
+```
+This will allow you to interact with the API through a web interface and test endpoints directly.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Swagger API Documentation
+
+Swagger is integrated into the project using the [Swagger Laravel package](https://github.com/DarkaOnLine/L5-Swagger). The API documentation is automatically generated from the annotations in the controller methods.
+
+### How to add new Swagger annotations:
+1. **Define the route in your controller** (e.g., `ChatroomController`).
+2. **Use OpenAPI annotations** like `@OA\Get`, `@OA\Post`, etc., to document the API route. Example:
+   ```php
+   /**
+    * @OA\Post(
+    *     path="/api/chatrooms",
+    *     summary="Create a new chatroom",
+    *     description="Creates a new chatroom in the application.",
+    *     tags={"Chatrooms"},
+    *     @OA\RequestBody(
+    *         required=true,
+    *         @OA\JsonContent(
+    *             @OA\Property(property="name", type="string", example="General Chat"),
+    *             @OA\Property(property="max_members", type="integer", example=100)
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=201,
+    *         description="Chatroom created",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="id", type="integer", example=1),
+    *             @OA\Property(property="name", type="string", example="General Chat")
+    *         )
+    *     )
+    * )
+    */
+   ```
+
+### Regenerate Swagger Documentation:
+To regenerate the Swagger documentation after adding or changing annotations, run the following command:
+
+```bash
+docker-compose exec app php artisan l5-swagger:generate
+```
+
+This will regenerate the `swagger.json` file which is used by Swagger UI to render the documentation.
+
+## Docker Commands
+
+Here are some useful Docker commands:
+
+- **Start the application**:
+  ```bash
+  docker-compose up -d
+  ```
+
+- **Stop the application**:
+  ```bash
+  docker-compose down
+  ```
+
+- **Access the Laravel application container**:
+  ```bash
+  docker-compose exec app bash
+  ```
+
+- **View logs**:
+  ```bash
+  docker-compose logs -f
+  ```
+
+## Environment Configuration
+
+You may need to update your `.env` file based on the Docker container environment. By default, the application uses the following environment variables for Docker:
+
+- **APP_URL**: The URL for the Laravel application (`http://localhost` by default).
+- **DB_CONNECTION**: The database connection (`mysql` by default).
+- **DB_HOST**: The database host (`mysql` by default, which corresponds to the MySQL container).
+- **DB_PORT**: The database port (default: `3306`).
+- **DB_DATABASE**: The database name (`laravel` by default).
+- **DB_USERNAME**: The MySQL user (`root` by default).
+- **DB_PASSWORD**: The password for MySQL (`root` by default).
+
+Make sure your `.env` file matches these settings for Docker to work properly.
+
+---
