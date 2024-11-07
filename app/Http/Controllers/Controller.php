@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
  * @OA\Info(
  *      version="1.0.0",
  *      title="Dokumentasi API",
+ *      summary="Whatsapp Clone API Documentation, more details at https://github.com/satrijo/whatsapp-clone/blob/main/README.md",
  *      description="Whatsapp Clone API Documentation, more details at https://github.com/satrijo/whatsapp-clone/blob/main/README.md",
  *
  *      @OA\Contact(
@@ -27,7 +28,7 @@ namespace App\Http\Controllers;
  * )
  *
  * @OA\Server(
- *      url=L5_SWAGGER_CONST_HOST,
+ *      url=APP_URL,
  *      description="Demo API Server"
  * )
  */
