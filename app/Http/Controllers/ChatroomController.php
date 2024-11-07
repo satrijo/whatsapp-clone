@@ -11,17 +11,17 @@ class ChatroomController extends Controller
     /**
      * @OA\Get(
      *     path="/api/chatrooms",
-     *     summary="Get paginated chatrooms",
-     *     description="Retrieves a paginated list of chatrooms.",
+     *     summary="Get chatrooms with infinite scroll support",
+     *     description="Retrieves a cursor-paginated list of chatrooms.",
      *     tags={"Chatrooms"},
      *     security={{"sanctum": {}}},
      *
      *     @OA\Parameter(
-     *         name="page",
+     *         name="cursor",
      *         in="query",
      *         required=false,
-     *         description="Page number for pagination",
-     *         @OA\Schema(type="integer", example=1)
+     *         description="Cursor for pagination",
+     *         @OA\Schema(type="string", example="1")
      *     ),
      *     @OA\Parameter(
      *         name="per_page",
@@ -33,8 +33,7 @@ class ChatroomController extends Controller
      *
      *     @OA\Response(
      *         response=200,
-     *         description="A paginated list of chatrooms",
-     *
+     *         description="A cursor-paginated list of chatrooms",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="data", type="array",
@@ -47,21 +46,7 @@ class ChatroomController extends Controller
      *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-06T12:00:00Z")
      *                 )
      *             ),
-     *             @OA\Property(property="links", type="object",
-     *                 @OA\Property(property="first", type="string", example="http://api.example.com/api/chatrooms?page=1"),
-     *                 @OA\Property(property="last", type="string", example="http://api.example.com/api/chatrooms?page=10"),
-     *                 @OA\Property(property="prev", type="string", nullable=true, example="http://api.example.com/api/chatrooms?page=1"),
-     *                 @OA\Property(property="next", type="string", nullable=true, example="http://api.example.com/api/chatrooms?page=3")
-     *             ),
-     *             @OA\Property(property="meta", type="object",
-     *                 @OA\Property(property="current_page", type="integer", example=2),
-     *                 @OA\Property(property="from", type="integer", example=11),
-     *                 @OA\Property(property="last_page", type="integer", example=10),
-     *                 @OA\Property(property="path", type="string", example="http://api.example.com/api/chatrooms"),
-     *                 @OA\Property(property="per_page", type="integer", example=10),
-     *                 @OA\Property(property="to", type="integer", example=20),
-     *                 @OA\Property(property="total", type="integer", example=100)
-     *             )
+     *             @OA\Property(property="next_cursor", type="string", nullable=true, example="eyJpdiI6Ijg3NjU0MyIsInZhbHVlIjoxfQ==")
      *         )
      *     ),
      *
@@ -74,14 +59,16 @@ class ChatroomController extends Controller
      *     )
      * )
      */
+
     public function index()
     {
-        $perPage = request('per_page', 10); // Default per page 10
-        $chatrooms = Chatroom::paginate($perPage);
-
-        return response()->json($chatrooms);
+        $perPage = request('per_page', 10); // Jumlah item per page, default 10
+        $chatrooms = Chatroom::cursorPaginate($perPage);
+        return response()->json([
+            'data' => $chatrooms->items(),
+            'next_cursor' => $chatrooms->nextCursor() ? $chatrooms->nextCursor()->encode() : null
+        ]);
     }
-
 
     /**
      * @OA\Post(

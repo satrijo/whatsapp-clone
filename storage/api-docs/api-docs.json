@@ -24,18 +24,18 @@
                 "tags": [
                     "Chatrooms"
                 ],
-                "summary": "Get paginated chatrooms",
-                "description": "Retrieves a paginated list of chatrooms.",
+                "summary": "Get chatrooms with infinite scroll support",
+                "description": "Retrieves a cursor-paginated list of chatrooms.",
                 "operationId": "ce7fe6f309c557b6e5c5b4fa2acbed05",
                 "parameters": [
                     {
-                        "name": "page",
+                        "name": "cursor",
                         "in": "query",
-                        "description": "Page number for pagination",
+                        "description": "Cursor for pagination",
                         "required": false,
                         "schema": {
-                            "type": "integer",
-                            "example": 1
+                            "type": "string",
+                            "example": "1"
                         }
                     },
                     {
@@ -51,7 +51,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "A paginated list of chatrooms",
+                        "description": "A cursor-paginated list of chatrooms",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -86,61 +86,10 @@
                                                 "type": "object"
                                             }
                                         },
-                                        "links": {
-                                            "properties": {
-                                                "first": {
-                                                    "type": "string",
-                                                    "example": "http://api.example.com/api/chatrooms?page=1"
-                                                },
-                                                "last": {
-                                                    "type": "string",
-                                                    "example": "http://api.example.com/api/chatrooms?page=10"
-                                                },
-                                                "prev": {
-                                                    "type": "string",
-                                                    "example": "http://api.example.com/api/chatrooms?page=1",
-                                                    "nullable": true
-                                                },
-                                                "next": {
-                                                    "type": "string",
-                                                    "example": "http://api.example.com/api/chatrooms?page=3",
-                                                    "nullable": true
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "meta": {
-                                            "properties": {
-                                                "current_page": {
-                                                    "type": "integer",
-                                                    "example": 2
-                                                },
-                                                "from": {
-                                                    "type": "integer",
-                                                    "example": 11
-                                                },
-                                                "last_page": {
-                                                    "type": "integer",
-                                                    "example": 10
-                                                },
-                                                "path": {
-                                                    "type": "string",
-                                                    "example": "http://api.example.com/api/chatrooms"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer",
-                                                    "example": 10
-                                                },
-                                                "to": {
-                                                    "type": "integer",
-                                                    "example": 20
-                                                },
-                                                "total": {
-                                                    "type": "integer",
-                                                    "example": 100
-                                                }
-                                            },
-                                            "type": "object"
+                                        "next_cursor": {
+                                            "type": "string",
+                                            "example": "eyJpdiI6Ijg3NjU0MyIsInZhbHVlIjoxfQ==",
+                                            "nullable": true
                                         }
                                     },
                                     "type": "object"
