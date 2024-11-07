@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
  * @OA\Info(
  *      version="1.0.0",
  *      title="Dokumentasi API",
- *      summary="Whatsapp Clone API Documentation, more details at https://github.com/satrijo/whatsapp-clone/blob/main/README.md",
  *      description="Whatsapp Clone API Documentation, more details at https://github.com/satrijo/whatsapp-clone/blob/main/README.md",
  *
  *      @OA\Contact(
@@ -28,7 +27,7 @@ namespace App\Http\Controllers;
  * )
  *
  * @OA\Server(
- *      url=APP_URL,
+ *      url="https://hyperhire.rack.my.id",
  *      description="Demo API Server"
  * )
  */

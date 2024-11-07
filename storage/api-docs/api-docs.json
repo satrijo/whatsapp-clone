@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost",
+            "url": "https://hyperhire.rack.my.id",
             "description": "Demo API Server"
         }
     ],
