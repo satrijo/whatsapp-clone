@@ -11,26 +11,56 @@ class ChatroomController extends Controller
     /**
      * @OA\Get(
      *     path="/api/chatrooms",
-     *     summary="Get all chatrooms",
-     *     description="Retrieves a list of all chatrooms.",
+     *     summary="Get paginated chatrooms",
+     *     description="Retrieves a paginated list of chatrooms.",
      *     tags={"Chatrooms"},
      *     security={{"sanctum": {}}},
      *
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         description="Page number for pagination",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         required=false,
+     *         description="Number of chatrooms per page",
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *
      *     @OA\Response(
      *         response=200,
-     *         description="A list of all chatrooms",
+     *         description="A paginated list of chatrooms",
      *
      *         @OA\JsonContent(
-     *             type="array",
-     *
-     *             @OA\Items(
-     *                 type="object",
-     *
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="General Chat"),
-     *                 @OA\Property(property="max_members", type="integer", example=100),
-     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-06T12:00:00Z"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-06T12:00:00Z")
+     *             type="object",
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="name", type="string", example="General Chat"),
+     *                     @OA\Property(property="max_members", type="integer", example=100),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-06T12:00:00Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-06T12:00:00Z")
+     *                 )
+     *             ),
+     *             @OA\Property(property="links", type="object",
+     *                 @OA\Property(property="first", type="string", example="http://api.example.com/api/chatrooms?page=1"),
+     *                 @OA\Property(property="last", type="string", example="http://api.example.com/api/chatrooms?page=10"),
+     *                 @OA\Property(property="prev", type="string", nullable=true, example="http://api.example.com/api/chatrooms?page=1"),
+     *                 @OA\Property(property="next", type="string", nullable=true, example="http://api.example.com/api/chatrooms?page=3")
+     *             ),
+     *             @OA\Property(property="meta", type="object",
+     *                 @OA\Property(property="current_page", type="integer", example=2),
+     *                 @OA\Property(property="from", type="integer", example=11),
+     *                 @OA\Property(property="last_page", type="integer", example=10),
+     *                 @OA\Property(property="path", type="string", example="http://api.example.com/api/chatrooms"),
+     *                 @OA\Property(property="per_page", type="integer", example=10),
+     *                 @OA\Property(property="to", type="integer", example=20),
+     *                 @OA\Property(property="total", type="integer", example=100)
      *             )
      *         )
      *     ),
@@ -38,9 +68,7 @@ class ChatroomController extends Controller
      *     @OA\Response(
      *         response=500,
      *         description="Internal server error",
-     *
      *         @OA\JsonContent(
-     *
      *             @OA\Property(property="error", type="string", example="Error message")
      *         )
      *     )
@@ -48,10 +76,12 @@ class ChatroomController extends Controller
      */
     public function index()
     {
-        $chatrooms = Chatroom::all();
+        $perPage = request('per_page', 10); // Default per page 10
+        $chatrooms = Chatroom::paginate($perPage);
 
         return response()->json($chatrooms);
     }
+
 
     /**
      * @OA\Post(

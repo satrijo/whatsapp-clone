@@ -27,7 +27,7 @@ namespace App\Http\Controllers;
  * )
  *
  * @OA\Server(
- *      url="https://hyperhire.rack.my.id",
+ *      url=L5_SWAGGER_CONST_HOST,
  *      description="Demo API Server"
  * )
  */
